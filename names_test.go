@@ -101,6 +101,13 @@ func TestToken(t *testing.T) {
 				{Symbol, "0", 0},
 			},
 		},
+		{
+			"isValid",
+			[]Token{
+				{Word, "is", 0},
+				{Word, "Valid", 0},
+			},
+		},
 	}
 
 	for _, test := range tests {

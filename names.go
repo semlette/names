@@ -115,17 +115,19 @@ func (tok *Tokeniser) readWord(r rune, start int) Token {
 		}
 		switch {
 		case unicode.IsLetter(r):
-			if uppercaseFlag && !unicode.IsUpper(r) {
+			uppercaseRune := unicode.IsUpper(r)
+			if uppercaseFlag && !uppercaseRune {
 				uppercaseFlag = false
 			}
 			peek, allowed := tok.peek()
 			if !allowed {
-				return tok.invalid(string(r))
+				return tok.invalid(string(peek))
 			}
-			if peek != eof && uppercaseFlag && count > 2 && !unicode.IsUpper(peek) {
+			uppercasePeek := unicode.IsUpper(peek)
+			if peek != eof && uppercaseFlag && count > 2 && !uppercasePeek {
 				tok.pos -= tok.width
 				return Token{Kind: Word, Value: tok.Input[start:tok.pos], Flags: flags(uppercaseFlag)}
-			} else if !uppercaseFlag && count > 1 && unicode.IsUpper(peek) {
+			} else if !uppercaseFlag && uppercasePeek {
 				return Token{Kind: Word, Value: tok.Input[start:tok.pos], Flags: flags(uppercaseFlag)}
 			}
 			count++
