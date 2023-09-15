@@ -2,6 +2,7 @@
 package names
 
 import (
+	"strings"
 	"unicode"
 	"unicode/utf8"
 )
@@ -55,12 +56,10 @@ func (tok *Tokeniser) Token() Token {
 }
 
 func (tok *Tokeniser) allowed(r rune) bool {
-	for _, ch := range tok.Characters {
-		if ch == r {
-			return true
-		}
+	if tok.Characters == "" {
+		return true
 	}
-	return false
+	return strings.ContainsRune(tok.Characters, r)
 }
 
 const eof rune = 0
